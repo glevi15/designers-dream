@@ -20,16 +20,6 @@
     </v-app-bar>
 
     <v-navigation-drawer app v-model="drawer" class="blue lighten-2">
-        <v-layout column align-center>
-
-            <v-flex class="mt-5">
-                <v-avatar size="100">
-                    <img src="/pngwave.png" alt="">
-                </v-avatar>
-                <p class="white--text subheading mt-1">İhsan Yazıcı</p>
-            </v-flex>
-
-        </v-layout>
         <v-list-shaped>
             <v-subheader>MENU</v-subheader>
              <v-list-item-group v-model="item" color="primary">
@@ -56,7 +46,7 @@ export default {
             drawer: false,
             links: [
                 {icon: 'dashboard', text: 'Dashboard', route: '/'},
-                {icon: 'edit', text: 'New Project', route: '/newproject'},
+                {icon: 'edit', text: 'New Project', route: '/projects'},
                 {icon: 'create_new_folder', text: 'My Projects', route: '/projects'},                
             ]
         }
