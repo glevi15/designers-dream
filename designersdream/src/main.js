@@ -1,13 +1,31 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import vuetify from './plugins/vuetify';
+import vuetify from './plugins/vuetify'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
+
 Vue.config.productionTip = false
+
+import Paintable from 'vue-paintable';
+
+Vue.use(Paintable, {
+  // optional methods
+  setItem(key, image) {
+    localStorage.setItem(key, image);
+  },
+  // you also can use async
+  getItem(key) {
+    return localStorage.getItem(key);
+  },
+  removeItem(key) {
+    localStorage.removeItem(key);
+  }
+});
 
 new Vue({
   router,
   vuetify,
   render: h => h(App)
 }).$mount('#app')
+

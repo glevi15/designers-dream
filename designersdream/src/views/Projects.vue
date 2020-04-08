@@ -8,7 +8,7 @@
 
         <v-tooltip top>
           <template v-slot:activator="{ on }">
-            <v-btn text small flat color="grey" v-on ="on" @click="sortBy('title')">
+            <v-btn text small color="grey" v-on ="on" @click="sortBy('title')">
               <v-icon left small>folder</v-icon>
               <span class="caption text-lowercase">by project name</span>
             </v-btn>
@@ -18,7 +18,7 @@
 
         <v-tooltip top>
           <template v-slot:activator="{ on }">
-            <v-btn text small flat color="grey" v-on ="on" @click="sortBy('status')">
+            <v-btn text small color="grey" v-on ="on" @click="sortBy('status')">
               <v-icon left small>offline_pin</v-icon>
               <span class="caption text-lowercase">by status</span>
             </v-btn>
@@ -55,22 +55,20 @@
 
       
 
-        <v-btn small flat color="primary"  class="my-6 ml-10">
+        <v-btn small color="primary"  class="my-6 ml-10">
           <span class="caption">Select</span>
         </v-btn>
 
-        <v-btn small flat color="primary"  class="my-6 ml-10">
+        <v-btn small color="primary"  class="my-6 ml-10">
           <v-icon left small>delete</v-icon>
           <span class="caption">Delete</span>
         </v-btn>
 
-        <v-btn small flat color="primary" class="my-6 ml-10">
+        <v-btn small color="primary" class="my-6 ml-10">
           <v-icon left small>cloud_download</v-icon>
           <span class="caption">Download</span>
         </v-btn>
-
       
-
     </v-container>
   </div>
 </template>

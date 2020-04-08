@@ -38,9 +38,10 @@
 
 </template>
 
+
 <script>
 export default {
-  data() {
+    data() {
     return {
       info: [
           {name: 'Type Something Here1', image: 'Maybe an image here?1'},
@@ -48,8 +49,16 @@ export default {
       ]
     }
   }
+
 }
 </script>
 
+<style>
+body {
+  font-family: Helvetica, Arial, sans-serif;
+  position: initial !important;
+}
+</style>
 
  
+
