@@ -8,7 +8,7 @@ Tested on Tensorflow 1.4.1, CUDA 8.0 and CuDNN 6.0
 
 ## Set up
 
-To run it, first download the model from [here]() and paste the contents into the `model` directory.
+To run it, first download the model from [here](https://drive.google.com/open?id=1WIbbx6H6-jlcJwSNdQ_4kiYJtAlBseJd) and paste the contents into the `model` directory.
 
 Then, run these commands:
 
