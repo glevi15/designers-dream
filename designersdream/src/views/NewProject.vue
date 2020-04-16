@@ -1,14 +1,28 @@
 <template>
   <div class ="projects">
     <h1>Projects</h1>
-  <v-container fill-height>
+
+  <v-row class="pr-12">
+    <v-col sm=5></v-col>
+    <v-col sm=5></v-col>
+    <v-col class="px-12" sm=2>
+
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-switch v-model="gridswitch" class="pl-12" label="Grid" v-on="on"></v-switch>
+        </template>
+      <span>Changes the image preview</span>
+    </v-tooltip>
+        
+    </v-col>
+    
+  </v-row>
+  <v-container>
     <v-row no-gutters>
-      <v-col class= "pt-12 px-12" cols="12" xs="12" sm="5">
+      <v-col class= "px-12" cols="12" xs="12" sm="5">
           <div class="custom-navigation"> 
-            <paintable id="Genco"
+            <paintable
               :active="isActive"
-              :width="500"
-              :height="500"
               :horizontalNavigation="false"
               :navigation="navigation"
               :factor="x1"
@@ -29,66 +43,116 @@
           </div>
       </v-col>
 
-      <v-col class="pt-12" sm="2">
-        <v-card height = "100" width = "1200" class="pa-2 white" flat tile>
-                 
-          <v-flex class="mt-12 pt-12 pl-2 ml-12" >
+      <v-col class="" sm="2">
+        <v-row class="mt-12"> </v-row>
+        <v-row class="mt-12"> </v-row>
+        <v-row class="mt-12"> </v-row>
+        <v-row class="mt-12"> </v-row>
 
-            <v-btn x-large color="success" dark>
-              Get Image
-              <v-icon center>play_arrow</v-icon>
+        <v-row class="mt-12">
+          <v-col class= "ml-8" cols="12" sm="8">
+            <v-btn x-large color="primary" >
+              GET IMAGE
+              <v-icon>mdi-upload</v-icon>
             </v-btn>
-
-          </v-flex>
-
-          <v-flex class="mt-12 pt-12 pl-2 ml-12" >
-
-             <v-btn class="ml-12 mb-3" small color="success" dark>
-              Twitter
-            </v-btn>
-
-            <v-layout row wrap>
-              <v-btn class="mr-2" small color="success" dark>
-              Facebook
-            </v-btn>
-
-            <v-btn small color="success" dark>
-              Instagram
-            </v-btn>
-
-            </v-layout>           
-          </v-flex>
-
-        </v-card>
+          </v-col>
+        </v-row>
       </v-col>
 
-      <v-col class="pt-12 px-12" cols="12" sm="5">
-        <v-card class="d-inline-block mx-auto" shaped>
-          <v-container>
+      <v-col class=" px-12" cols="12" sm="5">
+        <v-card class="d-inline-block mx-auto" outlined>
+          <v-container class="mt-6">
             <v-row justify="space-between">
-              <v-col cols="auto">
-                <v-img
-                  height="510"
-                  width="510"
-                  src="https://rukminim1.flixcart.com/image/832/832/jjylw280/bag/y/3/f/trendy-designer-luxury-handbag-italian-design-with-sling-bag-original-imaf7fynf3mmhhav.jpeg?q=70"
+                <v-img class="ml-12"
+                  height="480"
+                  width="480"
+                  src= "https://rukminim1.flixcart.com/image/832/832/jjylw280/bag/y/3/f/trendy-designer-luxury-handbag-italian-design-with-sling-bag-original-imaf7fynf3mmhhav.jpeg?q=70"
                 ></v-img>
-              </v-col>
-              <v-col cols="auto" class="text-center pl-0">
 
-              </v-col>
+        <v-menu bottom right offset-x>
+          <template v-slot:activator="{ on }">
+
+            <v-btn x-large class="" icon v-on="on">
+              <v-icon>mdi-share-variant</v-icon>
+            </v-btn>
+
+          </template>
+
+          <v-card class="mx-auto" max-width="300" tile>
+
+            <v-list>
+              <v-list-item-group v-model="item" color="primary">
+                <v-list-item v-for="(item, i) in items" :key="i">
+
+                  <v-list-item-icon>
+                    <v-icon v-text="item.icon"></v-icon>
+                  </v-list-item-icon>
+
+                  <v-list-item-content>
+                    <v-list-item-title v-text="item.title"></v-list-item-title>
+                  </v-list-item-content>
+
+                </v-list-item>
+
+              </v-list-item-group>
+            </v-list>
+        </v-card>
+      </v-menu>
+
             </v-row>
           </v-container>
         </v-card>
       </v-col>
-
     </v-row>
+    
+  <v-row class="ml-12">
+    <v-col sm="4"></v-col>
+    <v-col sm="4"></v-col>
+    <v-col class="ml-5">
+      <v-btn fab class= "ml-12" icon>
+        <v-icon x-large color="primary">mdi-arrow-left-bold</v-icon>
+      </v-btn>
+
+      <v-btn fab class= "ml-12" icon>
+        <v-icon x-large color="primary">mdi-arrow-right-bold</v-icon>
+      </v-btn>
+
+    </v-col>
+  </v-row>
+
+  <v-row class="pr-6">
+    <v-spacer></v-spacer>
+    <v-col sm=3 class="pr-12 mr-12">
+        <v-btn x-large shaped>
+            SAVE IMAGE
+          <v-icon x-large color="primary">mdi-content-save</v-icon>
+        </v-btn>
+    </v-col>
+  </v-row>
   </v-container>
 
+    <v-container fluid class="pa-0">
+      <v-row>
+        
+      </v-row>
+    </v-container>
   </div>
+
+  
 </template>
 
 <script>
 export default {
+
+  data: () => ({
+      items: [
+        { title: 'Facebook' ,icon:'mdi-facebook' ,route:'/' },
+        { title: 'Twitter' ,icon:'mdi-twitter' ,route:'/'},
+        { title: 'Instagram' ,icon:'mdi-instagram' ,route:'/'},
+      ],
+
+    }),
+
     computed: {
     navigation() {
       return {
@@ -105,7 +169,7 @@ export default {
       };
     }
   },
-  
+ 
 }
 </script>
 
@@ -129,9 +193,9 @@ export default {
 }
 
 .custom-navigation {
-  position: fixed;
+  position:static;
   top: 160px;
-  left: 100px;
+  left: 240px;
   z-index: 1;
   background-color: #fff;
 }
