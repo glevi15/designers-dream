@@ -9,14 +9,7 @@
         <span class="font-weight-light">Designers</span>
         <span>Dream</span>
         </v-toolbar-title>
-
         
-        <v-spacer></v-spacer>
-        <v-btn flat color="dark">
-            <span>Log Out</span>
-            <v-icon right>exit_to_app</v-icon>
-        </v-btn>
-     
     </v-app-bar>
 
     <v-navigation-drawer app v-model="drawer" class="blue lighten-2">
@@ -27,6 +20,10 @@
                     <img src="/pngwave.png" alt="">
                 </v-avatar>
                 <p class="white--text subheading mt-1">İhsan Yazıcı</p>
+            </v-flex>
+
+            <v-flex class="mt-4 mb-3">
+                <Popup />
             </v-flex>
 
         </v-layout>
@@ -50,7 +47,11 @@
 
 
 <script>
+import Popup from './Popup'
+    
 export default {
+    components: { Popup },
+
     data() {
         return{
             drawer: false,
