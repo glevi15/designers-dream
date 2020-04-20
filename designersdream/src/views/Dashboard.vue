@@ -54,10 +54,10 @@ export default {
 
 <style>
 body {
-  font-family: Helvetica, Arial, sans-serif;
   position: initial !important;
 }
 </style>
 
  
+
 
