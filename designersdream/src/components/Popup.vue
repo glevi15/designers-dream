@@ -14,7 +14,10 @@
         </v-card-title>
 
         <v-card-text>
-          Create a new project and start designing your dream!
+          <v-form class="px-3">
+            <v-text-field label="Title" v-model="title" prepend-icon="folder"></v-text-field>
+            <v-textarea label="Information" v-model="content" prepend-icon="edit"></v-textarea>
+          </v-form>
         </v-card-text>
 
         <v-divider></v-divider>
@@ -25,7 +28,7 @@
             color="primary"
             text
             :to="'/newproject'"
-            @click="dialog = false"
+            @click="submit()"
           >
             Create
           </v-btn>
@@ -40,7 +43,15 @@ export default {
      data () {
       return {
         dialog: false,
+        title: '',
+        content: '',
       }
     },
+      methods: {
+        submit() {
+          this.dialog = false,
+          console.log(this.title,this.content)
+        }
+      }
 }
 </script>
