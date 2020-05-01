@@ -7,6 +7,7 @@
   </v-app>
 </template>
 
+<!-- ADDED THE NAVBAR COMPONENT TO THE APP.VUE IN ORDER TO DISPLAY IT IN ALL ROUTES -->
 <script>
 import Navbar from '@/components/Navbar'
 

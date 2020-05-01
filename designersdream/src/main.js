@@ -7,6 +7,8 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
 Vue.config.productionTip = false
 
+
+//FROM HERE ...
 import Paintable from 'vue-paintable';
 
 Vue.use(Paintable, {
@@ -22,6 +24,7 @@ Vue.use(Paintable, {
     localStorage.removeItem(key);
   }
 });
+//UNTIL HERE, BELONGS TO THE PAINTABLE COMPONENT
 
 new Vue({
   router,

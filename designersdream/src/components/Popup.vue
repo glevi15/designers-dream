@@ -1,17 +1,12 @@
 <template>
   <div class="text-center">
-    <v-dialog
-      v-model="dialog"
-      width="500"
-    >
+    <v-dialog v-model="dialog" width="500">
       <template v-slot:activator="{ on }">
-        <v-btn color="success" dark v-on="on"> Add New Project </v-btn>
+        <v-btn color="success" dark v-on="on">Add New Project</v-btn>
       </template>
 
       <v-card>
-        <v-card-title class="headline grey lighten-2" primary-title>
-          Create New Project
-        </v-card-title>
+        <v-card-title class="headline grey lighten-2" primary-title>Create New Project</v-card-title>
 
         <v-card-text>
           <v-form class="px-3">
@@ -24,14 +19,7 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            text
-            :to="'/newproject'"
-            @click="submit()"
-          >
-            Create
-          </v-btn>
+          <v-btn color="primary" text :to="'/newproject'" @click="submit()">Create</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -40,18 +28,18 @@
 
 <script>
 export default {
-     data () {
-      return {
-        dialog: false,
-        title: '',
-        content: '',
-      }
-    },
-      methods: {
-        submit() {
-          this.dialog = false,
-          console.log(this.title,this.content)
-        }
-      }
-}
+  data() {
+    return {
+      dialog: false,
+      title: "",
+      content: ""
+    };
+  },
+  methods: {
+    submit() {
+      (this.dialog = false), console.log(this.title, this.content);
+      this.$emit("projectAdded"); //will be used to close snackbar in navbar component.
+    }
+  }
+};
 </script>
