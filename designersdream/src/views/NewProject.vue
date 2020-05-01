@@ -25,10 +25,12 @@
               :horizontalNavigation="false"
               :navigation="navigation"
               :factor="x1"
-              :lineWidth="dynamicLineWidth"
-              :lineWidthEraser="5"
+              :lineWidth="3"
+              :lineWidthEraser="25"
               :showLineWidth="false"
               :color="color"
+              :width="500"
+              :height="500"
               class="paint"
               ref="paintable"
               @toggle-paintable="toggledPaintable"
@@ -57,12 +59,10 @@
         </v-col>
 
         <v-col class="px-12" cols="12" sm="5">
-          <v-card class="d-inline-block mx-auto" outlined>
+          <v-card class="d-inline-block mx-auto" outlined max-height="520" max-width="550">
             <v-container class="mt-6">
               <v-row justify="space-between">
-                <img id="Gencoimg"
-                class = "ml-12"
-                >
+                <img id="inputImg">
 
                 <v-menu bottom right offset-x>
                   <template v-slot:activator="{ on }">
@@ -131,9 +131,51 @@ export default {
   }),
 
   methods: {
+    convert(dataUrl, imageElts) {
+      // send data to backend via js fetch API
+      const myData = { imageData: dataUrl };
+      const myDataJSON = JSON.stringify(myData) 
+      console.log("hello convert", myDataJSON)
+
+      fetch('http://localhost:5000/' , {
+        method: 'GET'
+      }).then(response => console.log(response))
+
+      fetch('http://localhost:5000/convert', {
+        method: 'POST',
+        // mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: myDataJSON,
+      })
+      .then((response) => {
+        console.log("Response:",response)
+        return response.json()})
+      .then((convertedData) => {
+        let convertedImageData = convertedData.imageData
+        // process convertedData sent back from server
+        console.log('Success:', convertedData);
+        for(let i=0; i<imageElts.length; i++) {
+          imageElts[i].src = convertedImageData
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+    },
+
     loadImage() {
-      document.getElementById("Gencoimg").src = this.$refs.paintable.getItem();
-      console.log(this.$refs.paintable.getItem()); 
+      let myImg = document.getElementById("inp");
+      let dataUrl = this.$refs.paintable.getItem();
+      
+
+      
+      this.convert(dataUrl, [myImg]);
+
+      // console.log(dataUrl)
+      // document.getElementById("inp").src = this.$refs.paintable.getItem();
+      // console.log(this.$refs.paintable.getItem()); 
     }
   },
 
