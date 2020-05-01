@@ -4,9 +4,9 @@
     <h1>Projects</h1>
 
     <v-row>
-      <v-col xs6 sm4 md2 class=""></v-col>
-      <v-col xs6 sm4 md2 class=""></v-col>
-      <v-col xs6 sm4 md4 class="">
+      <v-col xs6 sm4 md2 class></v-col>
+      <v-col xs6 sm4 md2 class></v-col>
+      <v-col xs6 sm4 md4 class>
         <v-tooltip>
           <template v-slot:activator="{ on }">
             <v-switch v-model="gridswitch" label="Grid" v-on="on"></v-switch>
@@ -48,7 +48,7 @@
 
           <v-row class="mt-12">
             <v-col class="ml-8" cols="12" sm="8">
-              <v-btn x-large color="primary">
+              <v-btn x-large color="primary" @click="loadImage()">
                 GET IMAGE
                 <v-icon>mdi-upload</v-icon>
               </v-btn>
@@ -60,12 +60,9 @@
           <v-card class="d-inline-block mx-auto" outlined>
             <v-container class="mt-6">
               <v-row justify="space-between">
-                <v-img
-                  class="ml-12"
-                  height="480"
-                  width="480"
-                  src="https://rukminim1.flixcart.com/image/832/832/jjylw280/bag/y/3/f/trendy-designer-luxury-handbag-italian-design-with-sling-bag-original-imaf7fynf3mmhhav.jpeg?q=70"
-                ></v-img>
+                <img id="Gencoimg"
+                class = "ml-12"
+                >
 
                 <v-menu bottom right offset-x>
                   <template v-slot:activator="{ on }">
@@ -120,7 +117,6 @@
         </v-col>
       </v-row>
     </v-container>
-    
   </div>
 </template>
 
@@ -133,6 +129,13 @@ export default {
       { title: "Instagram", icon: "mdi-instagram", route: "/" }
     ]
   }),
+
+  methods: {
+    loadImage() {
+      document.getElementById("Gencoimg").src = this.$refs.paintable.getItem();
+      console.log(this.$refs.paintable.getItem()); 
+    }
+  },
 
   computed: {
     navigation() {
