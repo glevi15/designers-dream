@@ -40,6 +40,8 @@
               </div>
             </paintable>
           </div>
+          <canvas width="128" height="128" id="smallCanvas" style="border: 1px black"> ></canvas>
+          <img id="smallImg" >
         </v-col>
 
         <v-col class sm="2">
@@ -62,7 +64,7 @@
           <v-card class="d-inline-block mx-auto" outlined max-height="520" max-width="550">
             <v-container class="mt-6">
               <v-row justify="space-between">
-                <img id="inputImg">
+                <img id="outImg" :src=outImageSrc>
 
                 <v-menu bottom right offset-x>
                   <template v-slot:activator="{ on }">
@@ -127,19 +129,16 @@ export default {
       { title: "Facebook", icon: "mdi-facebook", route: "/" },
       { title: "Twitter", icon: "mdi-twitter", route: "/" },
       { title: "Instagram", icon: "mdi-instagram", route: "/" }
-    ]
+    ],
+    outImageSrc: "",
+    // smallImageSrc: "",
   }),
 
   methods: {
-    convert(dataUrl, imageElts) {
+    convert(dataUrl) {
       // send data to backend via js fetch API
       const myData = { imageData: dataUrl };
       const myDataJSON = JSON.stringify(myData) 
-      console.log("hello convert", myDataJSON)
-
-      fetch('http://localhost:5000/' , {
-        method: 'GET'
-      }).then(response => console.log(response))
 
       fetch('http://localhost:5000/convert', {
         method: 'POST',
@@ -149,16 +148,16 @@ export default {
         },
         body: myDataJSON,
       })
-      .then((response) => {
-        console.log("Response:",response)
-        return response.json()})
+      .then((response) =>  response.json())
       .then((convertedData) => {
         let convertedImageData = convertedData.imageData
         // process convertedData sent back from server
         console.log('Success:', convertedData);
-        for(let i=0; i<imageElts.length; i++) {
-          imageElts[i].src = convertedImageData
-        }
+
+        // here we are setting Vue data and letting it handle the
+        // DOM update. We could also receive the image element
+        // and set the src ourselves
+        this.outImageSrc = convertedImageData; 
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -166,16 +165,36 @@ export default {
     },
 
     loadImage() {
-      let myImg = document.getElementById("inp");
+      this.$refs.paintable.saveCurrentCanvasToStorage();
+
+      // let myImg = document.getElementById("outImg");
+
       let dataUrl = this.$refs.paintable.getItem();
       
-
+      let smallCanvas = document.getElementById("smallCanvas");
+      let ctx = smallCanvas.getContext('2d');
       
-      this.convert(dataUrl, [myImg]);
+      let smallImg = document.getElementById("smallImg");
+      smallImg.src = dataUrl;
 
-      // console.log(dataUrl)
-      // document.getElementById("inp").src = this.$refs.paintable.getItem();
-      // console.log(this.$refs.paintable.getItem()); 
+      smallImg.onload = () => {
+        // this.smallImageSrc = dataUrl;
+  
+        ctx.clearRect(0, 0, smallCanvas.width, smallCanvas.height);
+        ctx.drawImage(smallImg, 0, 0, smallCanvas.width, smallCanvas.height);
+        
+        let d = ctx.getImageData(0, 0, 128, 128);  // Get image Data from Canvas context
+        const threshold = 128
+        for (var i=0; i<d.data.length; i+=4) { // 4 is for RGBA channels
+          d.data[i] = d.data[i+1] = d.data[i+2] = d.data[i+1] > threshold ? 255 : 0;
+        }
+  
+        ctx.putImageData(d, 0, 0);  
+        let smallDataURL = smallCanvas.toDataURL() 
+  
+      // Data olarak src yerine koymak yerine, direk id den src sine set edebiliriz. DİPNOT
+        this.convert(smallDataURL);
+      }      
     }
   },
 
@@ -240,4 +259,4 @@ export default {
   top: -100px;
   left: 960px;
 }
-</style>
+</!style>
