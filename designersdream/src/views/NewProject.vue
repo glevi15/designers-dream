@@ -259,4 +259,4 @@ export default {
   top: -100px;
   left: 960px;
 }
-</!style>
+</style>
