@@ -40,8 +40,8 @@
               </div>
             </paintable>
           </div>
-          <canvas width="128" height="128" id="smallCanvas" style="border: 1px black"> ></canvas>
-          <img id="smallImg" >
+          <canvas width="128" height="128" id="smallCanvas" style="display: none"> ></canvas>
+          <img id="smallImg" style="display: none">
         </v-col>
 
         <v-col class sm="2">
@@ -179,10 +179,13 @@ export default {
 
       smallImg.onload = () => {
         // this.smallImageSrc = dataUrl;
-  
-        ctx.clearRect(0, 0, smallCanvas.width, smallCanvas.height);
+
+        ctx.save();
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, smallCanvas.width, smallCanvas.height);
         ctx.drawImage(smallImg, 0, 0, smallCanvas.width, smallCanvas.height);
-        
+        ctx.restore();
+
         let d = ctx.getImageData(0, 0, 128, 128);  // Get image Data from Canvas context
         const threshold = 128
         for (var i=0; i<d.data.length; i+=4) { // 4 is for RGBA channels
