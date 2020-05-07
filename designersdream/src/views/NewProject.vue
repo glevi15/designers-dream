@@ -3,23 +3,10 @@
   <div class="projects">
     <h1>Projects</h1>
 
-    <v-row>
-      <v-col xs6 sm4 md2 class></v-col>
-      <v-col xs6 sm4 md2 class></v-col>
-      <v-col xs6 sm4 md4 class>
-        <v-tooltip>
-          <template v-slot:activator="{ on }">
-            <v-switch v-model="gridswitch" label="Grid" v-on="on"></v-switch>
-          </template>
-          <span>Changes the image preview</span>
-        </v-tooltip>
-      </v-col>
-    </v-row>
-
     <v-container>
       <v-row no-gutters>
         <v-col class="px-12" cols="12" xs="12" sm="5">
-          <div class="custom-navigation">
+          <div class="custom-navigation">   <!-- Paintable canvas -->
             <paintable
               :active="isActive"
               :horizontalNavigation="false"
@@ -28,7 +15,7 @@
               :lineWidth="3"
               :lineWidthEraser="25"
               :showLineWidth="false"
-              :color="color"
+              :color="black"
               :width="500"
               :height="500"
               class="paint"
@@ -39,12 +26,12 @@
                 <h3>Paint</h3>
               </div>
             </paintable>
-          </div>
-          <canvas width="128" height="128" id="smallCanvas" style="display: none"> ></canvas>
-          <img id="smallImg" style="display: none">
+          </div>   <!--Paintable ends here -->
+          <canvas width="128" height="128" id="smallCanvas" style="display: none"> ></canvas> <!-- invisible canvas to scale the image-->
+          <img id="smallImg" style="display: none"> <!-- invisible image to scale the image inside the invisible canvas-->
         </v-col>
 
-        <v-col class sm="2">
+        <v-col class sm="2">   <!-- GET IMAGE BUTTON -->
           <v-row class="mt-12"></v-row>
           <v-row class="mt-12"></v-row>
           <v-row class="mt-12"></v-row>
@@ -52,7 +39,7 @@
 
           <v-row class="mt-12">
             <v-col class="ml-8" cols="12" sm="8">
-              <v-btn x-large color="primary" @click="loadImage()">
+              <v-btn x-large color="primary" @click="loadImage()">  <!-- Our loadImage function is assigned to the onclick of the Get Image Button -->
                 GET IMAGE
                 <v-icon>mdi-upload</v-icon>
               </v-btn>
@@ -61,12 +48,12 @@
         </v-col>
 
         <v-col class="px-12" cols="12" sm="5">
-          <v-card class="d-inline-block mx-auto" outlined max-height="520" max-width="550">
+          <v-card class="d-inline-block mx-auto mt-4" outlined height="500" width="500">
             <v-container class="mt-6">
               <v-row justify="space-between">
                 <img id="outImg" :src=outImageSrc>
 
-                <v-menu bottom right offset-x>
+                <v-menu bottom right offset-x>  <!--SHARE BUTTON -->
                   <template v-slot:activator="{ on }">
                     <v-btn x-large class icon v-on="on">
                       <v-icon>mdi-share-variant</v-icon>
@@ -88,32 +75,18 @@
                       </v-list-item-group>
                     </v-list>
                   </v-card>
-                </v-menu>
+                </v-menu>  <!-- SHARE BUTTON ENDS HERE -->
               </v-row>
             </v-container>
           </v-card>
         </v-col>
       </v-row>
 
-      <v-row class="ml-12">
-        <v-col sm="4"></v-col>
-        <v-col sm="4"></v-col>
-        <v-col class="ml-5">
-          <v-btn fab class="ml-12" icon>
-            <v-icon x-large color="primary">mdi-arrow-left-bold</v-icon>
-          </v-btn>
-
-          <v-btn fab class="ml-12" icon>
-            <v-icon x-large color="primary">mdi-arrow-right-bold</v-icon>
-          </v-btn>
-        </v-col>
-      </v-row>
-
-      <v-row class="pr-6">
+      <v-row class="pr-6">  <!-- SAVE IMAGE BUTTON / WORK-IN-PROGRESS / WILL BE USED TO UPLOAD THE PROJECTS TO DATABASE-->
         <v-spacer></v-spacer>
         <v-col sm="3" class="pr-12 mr-12">
-          <v-btn x-large shaped>
-            SAVE IMAGE
+          <v-btn x-large shaped text>
+            
             <v-icon x-large color="primary">mdi-content-save</v-icon>
           </v-btn>
         </v-col>
@@ -220,8 +193,8 @@ export default {
 };
 </script>
 
-
-<style>
+<!-- STYLING FOR THE PAINTABLE CANVAS -->
+<style> 
 .control {
   margin: 10px;
 }

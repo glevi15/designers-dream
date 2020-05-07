@@ -23,7 +23,7 @@
           <v-avatar size="100">
             <img src="/pngwave.png" alt />
           </v-avatar>
-          <p class="white--text subheading mt-1">Sevinç Ağayeva</p>
+          <p class="white--text subheading mt-4">Designers' Tools</p>
         </v-flex>
 
         <v-flex class="mt-4 mb-3">
@@ -60,10 +60,11 @@ export default {
       drawer: false,
       links: [
         { icon: "dashboard", text: "Dashboard", route: "/" },
-        { icon: "edit", text: "New Project", route: "/newproject" },
+
+       // { icon: "edit", text: "New Project", route: "/newproject" },
         { icon: "create_new_folder", text: "My Projects", route: "/projects" },
         //Added test for testing purposes
-        { icon: "folder", text: "Test Area", route: "/test" }
+       // { icon: "folder", text: "Test Area", route: "/test" }
       ],
       snackbar: false
     };
