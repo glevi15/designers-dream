@@ -18,8 +18,10 @@
         <v-divider></v-divider>
 
         <v-card-actions>
-          <v-spacer></v-spacer>
+          <v-btn color="success" text @click="cancel()">Cancel</v-btn>
+                            <v-spacer></v-spacer>
           <v-btn color="primary" text :to="'/newproject'" @click="submit()">Create</v-btn>
+          
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -39,6 +41,9 @@ export default {
     submit() {
       (this.dialog = false), console.log(this.title, this.content);
       this.$emit("projectAdded"); //will be used to close snackbar in navbar component.
+    },
+    cancel() {
+      (this.dialog = false);
     }
   }
 };

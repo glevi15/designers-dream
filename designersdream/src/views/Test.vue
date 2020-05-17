@@ -144,6 +144,8 @@ export default {
       alignment: "center",
       justify: "center",
       dialog: false,
+      title: "",
+      content:"",
       items: [
         { title: "Facebook", icon: "mdi-facebook", route: "/" },
         { title: "Twitter", icon: "mdi-twitter", route: "/" },
@@ -171,7 +173,7 @@ export default {
 
   methods: {
     submit() {
-      (this.dialog = false), console.log(this.title, this.content);
+      (this.dialog = false), console.log(this.title, this.content); 
       this.$emit("projectAdded"); //will be used to close snackbar in navbar component.
     },
     cancel() {

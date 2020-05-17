@@ -11,9 +11,11 @@
       <v-app-bar-nav-icon class="white --text" @click="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-toolbar-title>
+        <router-link class="font-weight-dark black--text" style="text-decoration:none;" :to="'/'">
         <span class="font-weight-light">Designers</span>
-        <span>Dream</span>
-      </v-toolbar-title>
+        <span >Dream</span>
+        </router-link>
+        </v-toolbar-title>
     </v-app-bar>
     
     <!-- Side Panel -->

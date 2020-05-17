@@ -10,7 +10,7 @@
             <!-- Paintable canvas -->
             <paintable
               :active="isActive"
-              :horizontalNavigation="false"
+              :horizontalNavigation="true"
               :navigation="navigation"
               :factor="x1"
               :lineWidth="3"

@@ -2,12 +2,13 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import tensorflow as tf
-import numpy as np
+# import tensorflow as tf
+# import numpy as np
 import json
 import base64
 from binascii import a2b_base64
 import urllib
+from pprint import pprint
 
 from flask import Flask, jsonify, request, render_template
 
@@ -22,7 +23,6 @@ cors = CORS(app, resources={r"/*": {"origins": "*"}})
 def convert():
     print('Incoming..')  # parse as JSON
     imageDataURI = request.get_json()['imageData']
-    print(imageDataURI[100:300])
     imageData = urllib.request.urlopen(imageDataURI).read()
 
     print('running model...')
@@ -38,33 +38,43 @@ def convert():
 def home():
     return render_template('index.html')
 
+@app.route('/create', methods=['POST'])
+def create_project() :
+    json_data = json.loads(request.get_data())
+
+    pprint(json_data)
+
+    # TODO return id of project from DB
+    return ""
+
 def run_model(imageData):
-    model_dir = "model"
+    # model_dir = "model"
 
-    input_instance = dict(input=base64.urlsafe_b64encode(imageData).decode("ascii"), key="0")
-    input_instance = json.loads(json.dumps(input_instance))
+    # input_instance = dict(input=base64.urlsafe_b64encode(imageData).decode("ascii"), key="0")
+    # input_instance = json.loads(json.dumps(input_instance))
 
-    b64data = None
-    # force CPU
-    config = tf.ConfigProto( device_count = {'GPU': 0})
+    # b64data = None
+    # # force CPU
+    # config = tf.ConfigProto( device_count = {'GPU': 0})
 
-    with tf.Session(config=config) as sess:
-        saver = tf.train.import_meta_graph(model_dir + "/export.meta")
-        saver.restore(sess, model_dir + "/export")
+    # with tf.Session(config=config) as sess:
+    #     saver = tf.train.import_meta_graph(model_dir + "/export.meta")
+    #     saver.restore(sess, model_dir + "/export")
 
-        input_vars = json.loads(tf.get_collection("inputs")[0].decode())
-        output_vars = json.loads(tf.get_collection("outputs")[0].decode())
-        input = tf.get_default_graph().get_tensor_by_name(input_vars["input"])
-        output = tf.get_default_graph().get_tensor_by_name(output_vars["output"])
+    #     input_vars = json.loads(tf.get_collection("inputs")[0].decode())
+    #     output_vars = json.loads(tf.get_collection("outputs")[0].decode())
+    #     input = tf.get_default_graph().get_tensor_by_name(input_vars["input"])
+    #     output = tf.get_default_graph().get_tensor_by_name(output_vars["output"])
 
-        input_value = np.array(input_instance["input"])
-        output_value = sess.run(output, feed_dict={input: np.expand_dims(input_value, axis=0)})[0]
+    #     input_value = np.array(input_instance["input"])
+    #     output_value = sess.run(output, feed_dict={input: np.expand_dims(input_value, axis=0)})[0]
 
-        output_instance = dict(output=output_value.decode("ascii"), key="0")
+    #     output_instance = dict(output=output_value.decode("ascii"), key="0")
 
-        b64data = output_instance["output"]
-        b64data += "=" * (-len(b64data) % 4)
-        output_data = base64.urlsafe_b64decode(b64data.encode("ascii"))
+    #     b64data = output_instance["output"]
+    #     b64data += "=" * (-len(b64data) % 4)
+    #     output_data = base64.urlsafe_b64decode(b64data.encode("ascii"))
 
-    return output_data
+    # return output_data
+    return []
 
