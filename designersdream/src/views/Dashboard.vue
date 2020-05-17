@@ -53,7 +53,7 @@
                       <v-img
                         height="200"
                         width="200"
-                        src="https://cdn.vuetifyjs.com/images/cards/store.jpg"
+                        src="/pants-sk.png"
                       ></v-img>
                     </v-col>
 
@@ -64,7 +64,7 @@
                 </v-container>
               </v-card>
               
-              <v-btn icon>
+              <v-btn icon style="align-self: center;">
                 <v-icon x-large color="primary">mdi-arrow-right-bold</v-icon>
               </v-btn>
               
@@ -76,7 +76,7 @@
                       <v-img
                         height="200"
                         width="200"
-                        src="https://cdn.vuetifyjs.com/images/cards/store.jpg"
+                        src="/pants.png"
                       ></v-img>
                     </v-col>
 
@@ -90,7 +90,7 @@
 
             <v-row></v-row>
 
-            <v-row>
+            <v-row>    <!-- second row -->
               <v-card class="d-inline-block mx-auto mt-8">
                 <v-container>
                   <v-row justify="space-between">
@@ -98,7 +98,7 @@
                       <v-img
                         height="200"
                         width="200"
-                        src="https://cdn.vuetifyjs.com/images/cards/store.jpg"
+                        src="/poster-sketch.png"
                       ></v-img>
                     </v-col>
 
@@ -110,7 +110,7 @@
               </v-card>
 
 
-              <v-btn icon>
+              <v-btn icon style="align-self: center;">
                 <v-icon x-large color="primary">mdi-arrow-right-bold</v-icon>
               </v-btn>
 
@@ -121,7 +121,7 @@
                       <v-img
                         height="200"
                         width="200"
-                        src="https://cdn.vuetifyjs.com/images/cards/store.jpg"
+                        src="/poster-img.png"
                       ></v-img>
                     </v-col>
 

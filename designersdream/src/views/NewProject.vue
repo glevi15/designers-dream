@@ -16,6 +16,7 @@
               :lineWidthEraser="25"
               :showLineWidth="false"
               :color="black"
+              :colors="false"
               :width="500"
               :height="500"
               class="paint"
@@ -48,10 +49,10 @@
         </v-col>
 
         <v-col class="px-12" cols="12" sm="5">
-          <v-card class="d-inline-block mx-auto mt-4" outlined height="500" width="500">
+          <v-card class="d-inline-block mx-auto mt-4" width="500" height="500"  >
             <v-container class="mt-6">
               <v-row justify="space-between">
-                <img id="outImg" :src=outImageSrc>
+                <img id="outImg" :src=outImageSrc width="500" height="500">
 
                 <v-menu bottom right offset-x>  <!--SHARE BUTTON -->
                   <template v-slot:activator="{ on }">
@@ -87,7 +88,7 @@
         <v-col sm="3" class="pr-12 mr-12">
           <v-btn x-large shaped text>
             
-            <v-icon x-large color="primary">mdi-content-save</v-icon>
+            <v-icon x-large @click=saveImage()  color="primary">mdi-content-save</v-icon>
           </v-btn>
         </v-col>
       </v-row>
@@ -135,6 +136,10 @@ export default {
       .catch((error) => {
         console.error('Error:', error);
       });
+    },
+
+    saveImage() {
+
     },
 
     loadImage() {
@@ -235,4 +240,14 @@ export default {
   top: -100px;
   left: 960px;
 }
+
+#outImg[src=""] {
+  display: none;
+
+}
+
+#outImg[src="data*"] {
+  display: block;
+}
+
 </style>
