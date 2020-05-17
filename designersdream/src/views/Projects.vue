@@ -55,7 +55,9 @@
                 <div>{{project.content}}</div>
                 <div>
                   <img height="128" width="128" v-bind:src="project.src" />
+                  <img height="128" width="128" v-bind:src="project.src2" />
                 </div>
+                  
               </v-card-text>
             </v-card>
           </v-expansion-panel-content>
@@ -88,6 +90,7 @@ export default {
           title: "My project #1",
           status: "Done",
           src: "/handbag.png",
+          src2: "/handbag.png",
           content:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sollicitudin mauris eu nulla accumsan, vitae luctus nisl egestas."
         },

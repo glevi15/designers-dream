@@ -6,7 +6,8 @@
     <v-container>
       <v-row no-gutters>
         <v-col class="px-12" cols="12" xs="12" sm="5">
-          <div class="custom-navigation">   <!-- Paintable canvas -->
+          <div class="custom-navigation">
+            <!-- Paintable canvas -->
             <paintable
               :active="isActive"
               :horizontalNavigation="false"
@@ -27,12 +28,16 @@
                 <h3>Paint</h3>
               </div>
             </paintable>
-          </div>   <!--Paintable ends here -->
-          <canvas width="128" height="128" id="smallCanvas" style="display: none"> ></canvas> <!-- invisible canvas to scale the image-->
-          <img id="smallImg" style="display: none"> <!-- invisible image to scale the image inside the invisible canvas-->
+          </div>
+          <!--Paintable ends here -->
+          <canvas width="128" height="128" id="smallCanvas" style="display: none">></canvas>
+          <!-- invisible canvas to scale the image-->
+          <img id="smallImg" style="display: none" />
+          <!-- invisible image to scale the image inside the invisible canvas-->
         </v-col>
 
-        <v-col class sm="2">   <!-- GET IMAGE BUTTON -->
+        <v-col class sm="2">
+          <!-- GET IMAGE BUTTON -->
           <v-row class="mt-12"></v-row>
           <v-row class="mt-12"></v-row>
           <v-row class="mt-12"></v-row>
@@ -40,7 +45,8 @@
 
           <v-row class="mt-12">
             <v-col class="ml-8" cols="12" sm="8">
-              <v-btn x-large color="primary" @click="loadImage()">  <!-- Our loadImage function is assigned to the onclick of the Get Image Button -->
+              <v-btn x-large color="primary" @click="loadImage()">
+                <!-- Our loadImage function is assigned to the onclick of the Get Image Button -->
                 GET IMAGE
                 <v-icon>mdi-upload</v-icon>
               </v-btn>
@@ -49,14 +55,35 @@
         </v-col>
 
         <v-col class="px-12" cols="12" sm="5">
-          <v-card class="d-inline-block mx-auto mt-4" width="500" height="500"  >
+          <v-card class="d-inline-block mx-auto mt-4" width="500" height="500">
             <v-container class="mt-6">
               <v-row justify="space-between">
-                <img id="outImg" :src=outImageSrc width="500" height="500">
+                <img id="outImg" :src="outImageSrc" width="500" height="500" />
 
-                <v-menu bottom right offset-x>  <!--SHARE BUTTON -->
+                
+                <!-- SHARE BUTTON ENDS HERE -->
+              </v-row>
+            </v-container>
+          </v-card>
+        </v-col>
+      </v-row>
+
+      <v-row class="pr-12 mr-12">
+        <!-- SAVE IMAGE BUTTON / WORK-IN-PROGRESS / WILL BE USED TO UPLOAD THE PROJECTS TO DATABASE-->
+        <v-spacer></v-spacer>
+        <v-col sm="3" class="pr-12 mr-12">
+          <v-btn x-large shaped text>
+            <v-icon x-large @click="saveImage()" color="primary">mdi-content-save</v-icon>
+          </v-btn>
+
+          <v-btn x-large text color="primary">
+            <v-icon x-large>cloud_download</v-icon>
+          </v-btn>
+
+          <v-menu bottom right offset-x>
+                  <!--SHARE BUTTON -->
                   <template v-slot:activator="{ on }">
-                    <v-btn x-large class icon v-on="on">
+                    <v-btn   x-large text icon v-on="on">
                       <v-icon>mdi-share-variant</v-icon>
                     </v-btn>
                   </template>
@@ -76,20 +103,7 @@
                       </v-list-item-group>
                     </v-list>
                   </v-card>
-                </v-menu>  <!-- SHARE BUTTON ENDS HERE -->
-              </v-row>
-            </v-container>
-          </v-card>
-        </v-col>
-      </v-row>
-
-      <v-row class="pr-6">  <!-- SAVE IMAGE BUTTON / WORK-IN-PROGRESS / WILL BE USED TO UPLOAD THE PROJECTS TO DATABASE-->
-        <v-spacer></v-spacer>
-        <v-col sm="3" class="pr-12 mr-12">
-          <v-btn x-large shaped text>
-            
-            <v-icon x-large @click=saveImage()  color="primary">mdi-content-save</v-icon>
-          </v-btn>
+                </v-menu>
         </v-col>
       </v-row>
     </v-container>
@@ -104,7 +118,7 @@ export default {
       { title: "Twitter", icon: "mdi-twitter", route: "/" },
       { title: "Instagram", icon: "mdi-instagram", route: "/" }
     ],
-    outImageSrc: "",
+    outImageSrc: ""
     // smallImageSrc: "",
   }),
 
@@ -112,35 +126,33 @@ export default {
     convert(dataUrl) {
       // send data to backend via js fetch API
       const myData = { imageData: dataUrl };
-      const myDataJSON = JSON.stringify(myData) 
+      const myDataJSON = JSON.stringify(myData);
 
-      fetch('http://localhost:5000/convert', {
-        method: 'POST',
+      fetch("http://localhost:5000/convert", {
+        method: "POST",
         // mode: 'no-cors',
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json"
         },
-        body: myDataJSON,
+        body: myDataJSON
       })
-      .then((response) =>  response.json())
-      .then((convertedData) => {
-        let convertedImageData = convertedData.imageData
-        // process convertedData sent back from server
-        console.log('Success:', convertedData);
+        .then(response => response.json())
+        .then(convertedData => {
+          let convertedImageData = convertedData.imageData;
+          // process convertedData sent back from server
+          console.log("Success:", convertedData);
 
-        // here we are setting Vue data and letting it handle the
-        // DOM update. We could also receive the image element
-        // and set the src ourselves
-        this.outImageSrc = convertedImageData; 
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+          // here we are setting Vue data and letting it handle the
+          // DOM update. We could also receive the image element
+          // and set the src ourselves
+          this.outImageSrc = convertedImageData;
+        })
+        .catch(error => {
+          console.error("Error:", error);
+        });
     },
 
-    saveImage() {
-
-    },
+    saveImage() {},
 
     loadImage() {
       this.$refs.paintable.saveCurrentCanvasToStorage();
@@ -148,10 +160,10 @@ export default {
       // let myImg = document.getElementById("outImg");
 
       let dataUrl = this.$refs.paintable.getItem();
-      
+
       let smallCanvas = document.getElementById("smallCanvas");
-      let ctx = smallCanvas.getContext('2d');
-      
+      let ctx = smallCanvas.getContext("2d");
+
       let smallImg = document.getElementById("smallImg");
       smallImg.src = dataUrl;
 
@@ -159,23 +171,25 @@ export default {
         // this.smallImageSrc = dataUrl;
 
         ctx.save();
-        ctx.fillStyle = 'white';
+        ctx.fillStyle = "white";
         ctx.fillRect(0, 0, smallCanvas.width, smallCanvas.height);
         ctx.drawImage(smallImg, 0, 0, smallCanvas.width, smallCanvas.height);
         ctx.restore();
 
-        let d = ctx.getImageData(0, 0, 128, 128);  // Get image Data from Canvas context
-        const threshold = 128
-        for (var i=0; i<d.data.length; i+=4) { // 4 is for RGBA channels
-          d.data[i] = d.data[i+1] = d.data[i+2] = d.data[i+1] > threshold ? 255 : 0;
+        let d = ctx.getImageData(0, 0, 128, 128); // Get image Data from Canvas context
+        const threshold = 128;
+        for (var i = 0; i < d.data.length; i += 4) {
+          // 4 is for RGBA channels
+          d.data[i] = d.data[i + 1] = d.data[i + 2] =
+            d.data[i + 1] > threshold ? 255 : 0;
         }
-  
-        ctx.putImageData(d, 0, 0);  
-        let smallDataURL = smallCanvas.toDataURL() 
-  
-      // Data olarak src yerine koymak yerine, direk id den src sine set edebiliriz. DİPNOT
+
+        ctx.putImageData(d, 0, 0);
+        let smallDataURL = smallCanvas.toDataURL();
+
+        // Data olarak src yerine koymak yerine, direk id den src sine set edebiliriz. DİPNOT
         this.convert(smallDataURL);
-      }      
+      };
     }
   },
 
@@ -199,7 +213,7 @@ export default {
 </script>
 
 <!-- STYLING FOR THE PAINTABLE CANVAS -->
-<style> 
+<style>
 .control {
   margin: 10px;
 }
@@ -243,11 +257,9 @@ export default {
 
 #outImg[src=""] {
   display: none;
-
 }
 
 #outImg[src="data*"] {
   display: block;
 }
-
 </style>
