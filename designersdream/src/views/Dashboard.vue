@@ -162,6 +162,8 @@
 </template>
 
 <script>
+import Vue from 'vue'
+
 export default {
   data() {
     return {
@@ -184,7 +186,8 @@ export default {
 
       const createMessage = {
         title: this.title,
-        description: this.content
+        description: this.content,
+        status: "Ongoing"
       };
       const createMessageJSON = JSON.stringify(createMessage);
 
@@ -197,16 +200,19 @@ export default {
         body: createMessageJSON
       })
         .then(response => response.json())
-        .then(convertedData => {
+        .then(data => {
           // TODO receive id of project here!!
-          console.log(convertedData)
+          console.log("from Dashboard - id = ", data.id)
+          Vue.prototype.$currentProjectId = data.id
+
+          this.$router.push("/newproject");
         })
         .catch(error => {
           console.error("Error:", error);
         });
 
-      this.$router.push("/newproject");
     },
+
     cancel() {
       this.dialog = false;
       console.log("Cancel");

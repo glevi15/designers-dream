@@ -45,7 +45,7 @@
 
           <v-row class="mt-12">
             <v-col class="ml-8" cols="12" sm="8">
-              <v-btn x-large color="primary" @click="loadImage()">
+              <v-btn x-large color="primary" @click="loadImage();buttonEnabler=false">
                 <!-- Our loadImage function is assigned to the onclick of the Get Image Button -->
                 GET IMAGE
                 <v-icon>mdi-upload</v-icon>
@@ -60,7 +60,6 @@
               <v-row justify="space-between">
                 <img id="outImg" :src="outImageSrc" width="500" height="500" />
 
-                
                 <!-- SHARE BUTTON ENDS HERE -->
               </v-row>
             </v-container>
@@ -76,34 +75,35 @@
             <v-icon x-large @click="saveImage()" color="primary">mdi-content-save</v-icon>
           </v-btn>
 
-          <v-btn x-large text color="primary">
+          <!-- DOWNLOAD BUTTON -->
+          <v-btn x-large text color="primary" @click="downloadImage()" id="downloadButton" :disabled="buttonEnabler">
             <v-icon x-large>cloud_download</v-icon>
           </v-btn>
 
           <v-menu bottom right offset-x>
-                  <!--SHARE BUTTON -->
-                  <template v-slot:activator="{ on }">
-                    <v-btn   x-large text icon v-on="on">
-                      <v-icon>mdi-share-variant</v-icon>
-                    </v-btn>
-                  </template>
+            <!--SHARE BUTTON -->
+            <template v-slot:activator="{ on }">
+              <v-btn x-large text icon v-on="on">
+                <v-icon>mdi-share-variant</v-icon>
+              </v-btn>
+            </template>
 
-                  <v-card class="mx-auto" max-width="300" tile>
-                    <v-list>
-                      <v-list-item-group v-model="item" color="primary">
-                        <v-list-item v-for="(item, i) in items" :key="i">
-                          <v-list-item-icon>
-                            <v-icon v-text="item.icon"></v-icon>
-                          </v-list-item-icon>
+            <v-card class="mx-auto" max-width="300" tile>
+              <v-list>
+                <v-list-item-group v-model="item" color="primary">
+                  <v-list-item v-for="(item, i) in items" :key="i">
+                    <v-list-item-icon>
+                      <v-icon v-text="item.icon"></v-icon>
+                    </v-list-item-icon>
 
-                          <v-list-item-content>
-                            <v-list-item-title v-text="item.title"></v-list-item-title>
-                          </v-list-item-content>
-                        </v-list-item>
-                      </v-list-item-group>
-                    </v-list>
-                  </v-card>
-                </v-menu>
+                    <v-list-item-content>
+                      <v-list-item-title v-text="item.title"></v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list-item-group>
+              </v-list>
+            </v-card>
+          </v-menu>
         </v-col>
       </v-row>
     </v-container>
@@ -111,19 +111,29 @@
 </template>
 
 <script>
+// import func from '../../vue-temp/vue-editor-bridge';
 export default {
   data: () => ({
+    
     items: [
       { title: "Facebook", icon: "mdi-facebook", route: "/" },
       { title: "Twitter", icon: "mdi-twitter", route: "/" },
       { title: "Instagram", icon: "mdi-instagram", route: "/" }
     ],
-    outImageSrc: ""
+    sketchImageSrc: "",
+    outImageSrc: "",
+    buttonEnabler : true
     // smallImageSrc: "",
   }),
 
+  mounted() {
+    console.log("from NewProject.vue", this.$currentProjectId)
+    //this.$currentProjectId
+    
+  },
+
   methods: {
-    convert(dataUrl) {
+  convert(dataUrl) {
       // send data to backend via js fetch API
       const myData = { imageData: dataUrl };
       const myDataJSON = JSON.stringify(myData);
@@ -140,7 +150,7 @@ export default {
         .then(convertedData => {
           let convertedImageData = convertedData.imageData;
           // process convertedData sent back from server
-          console.log("Success:", convertedData);
+          console.log("Successfully converted image");
 
           // here we are setting Vue data and letting it handle the
           // DOM update. We could also receive the image element
@@ -152,7 +162,42 @@ export default {
         });
     },
 
-    saveImage() {},
+    downloadImage() {
+      
+      var image = this.outImageSrc.replace("image/png", "image/octet-stream");
+      var link = document.createElement('a');
+      link.download = "my-design.png";
+      link.href = image;
+      link.click();
+    },
+
+    saveImage() {
+      console.log("Save image to database")
+
+      const saveMessage = {
+        id: this.$currentProjectId,
+        sketchImage: this.sketchImageSrc,
+        resultImage: this.outImageSrc
+      };
+      const saveMessageJson = JSON.stringify(saveMessage);
+
+      fetch("http://localhost:5000/save", {
+        method: "POST",
+        // mode: 'no-cors',
+        headers: {
+          "Content-Type": "text/plain"
+        },
+        body: saveMessageJson
+      })
+        .then(response => response.json())
+        .then(convertedData => {
+          // TODO receive id of project here!!
+          console.log(convertedData)
+        })
+        .catch(error => {
+          console.error("Error:", error);
+        });
+    },
 
     loadImage() {
       this.$refs.paintable.saveCurrentCanvasToStorage();
@@ -160,6 +205,7 @@ export default {
       // let myImg = document.getElementById("outImg");
 
       let dataUrl = this.$refs.paintable.getItem();
+      this.sketchImageSrc = dataUrl;
 
       let smallCanvas = document.getElementById("smallCanvas");
       let ctx = smallCanvas.getContext("2d");
