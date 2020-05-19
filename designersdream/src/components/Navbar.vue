@@ -2,7 +2,7 @@
   <nav>
     <!--Snackbar is the pop-up that tells the project is succesfully created-->
       <v-snackbar v-model="snackbar" :timeout="4000" top >
-          <span>Succesfully created the project</span>
+          <span>Project created successfully.</span>
           <v-btn text color="white" @click="snackbar = false">Close</v-btn>
       </v-snackbar>
 
