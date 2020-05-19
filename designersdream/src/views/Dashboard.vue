@@ -1,29 +1,33 @@
 <template>
   <div class="Dashboard">
-    <h1>Dashboard</h1>
+    <!-- <p class="display-2 font-italic pt-8 mx-12 pl-5">Dashboard</p> -->
 
-    <v-container class="my-5 pt-12">
-      <v-layout column wrap>
+    <v-container >
+      <v-layout column wrap class="pt-12">
         <v-row xs12 sm6 md4 lg3>
           <v-col>
-            <v-card color="primary" text class="text-xs-center pt-3 mx-4" max-width="600">
+            <v-card color="primary" text class="text-xs-center pt-3 mx-4" shaped :elevation="24">
               <v-card-text>
-                <div class="header white--text pt-2">WELCOME TO DESIGNER'S DREAM APP</div>
+                <!--<div class="header white--text pt-2 ">WELCOME TO DESIGNER'S DREAM APP</div> -->
+                <p class="header white--text display-2 pt-2 text-center"> Welcome to Designer's Dream!</p>
               </v-card-text>
             </v-card>
 
-            <v-card color="primary" text class="text-xs-center mt-5 mx-8" max-width="600">
+            <v-card color="primary" text class="text-xs-center mt-5 mx-4" shaped>
               <v-responsive class="pt-4">
-                <span class="white--text pa-2 .display-2">INSTRUCTIONS</span>
+                <p class="display-1 text-center white--text"> Instructions</p>
               </v-responsive>
               <v-card-text>
-                <span class="white--text pa-2">- Open the side bar</span>
-                <span
-                  class="white--text pa-2"
-                >- By clicking "Add New Project" button you can start working on a Project</span>
-                <span
-                  class="white--text pa-2"
-                >-By clicking "My Projects" option, you can see and manage your saved projects</span>
+                <p class="white--text pa-2 headline">- Open the side bar</p>
+                <p
+                  class="white--text pa-2 headline" 
+                >- Click <span class="font-italic font-weight-bold mr-1">Add New Project </span>  to start working on a Project</p>
+                <p
+                  class="white--text pa-2 headline"
+                >- Click <span class="font-italic font-weight-bold mr-1">My Projects </span> to see and manage your saved projects</p>                
+                <p
+                  class="white--text pa-2 headline"
+                >- Or press <span class="font-italic font-weight-bold mr-1">Get Started</span> below!</p>
 
                 <div class="dark--text">
                   <img src alt />
@@ -33,20 +37,21 @@
 
             <!-- HEADLINE -->
 
-            <v-card max-width="600" outlined color="primary" class="mt-5 mx-12">
+            <v-card  outlined color="primary" class="mt-5 mx-4" shaped>
               <v-list-item three-line>
                 <v-list-item-content>
-                  <v-list-item-title class="headline mb-1">Let's Get Started!</v-list-item-title>
-                  <v-list-item-title class="white--text">Click and get started!</v-list-item-title>
+                  <v-list-item-title class="white--text pa-2 headline">Are you ready to make your dreams come true?</v-list-item-title>
+                  <!-- <v-list-item-title class="white--text pl-2 title">Click and get started!</v-list-item-title> -->
                 </v-list-item-content>
               </v-list-item>
 
               <v-dialog v-model="dialog" width="500">
                 <template v-slot:activator="{ on }">
                   <v-row>
-                    <v-spacer></v-spacer>
-                    <v-col class="text-right">
-                      <v-btn v-on="on" class="mr-6">Get Started</v-btn>
+                    <v-col class="mx-6"><p class="white--text  title">Click and get started!</p></v-col>
+                    
+                    <v-col class="text-right ">
+                      <v-btn x-large flat v-on="on" class="mr-6" >Get Started</v-btn>
                     </v-col>
                   </v-row>
                 </template>
@@ -82,8 +87,8 @@
             </v-card>
           </v-col>
 
-          <v-col>
-            <v-row>
+          <v-col class="pt-12 mt-12" >
+            <v-row class="pt-8 pb-8 ">
               <!-- first row of images -->
               <v-card class="d-inline-block mx-auto">
                 <v-container>

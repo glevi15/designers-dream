@@ -1,14 +1,14 @@
 <template>
   <div class="PROJECTS">
-    <h1>Projects</h1>
+    <p class="display-2 font-italic pt-8 mx-12 pl-5 yellow--text text--lighten-3">Projects</p>
 
     <v-container class="my-5">
       <v-layout row class="mb-3 justify-end">
         <v-tooltip top>
           <template v-slot:activator="{ on }">
-            <v-btn text small color="grey" v-on="on" @click="sortBy('title')">
+            <v-btn text small color="yellow" v-on="on" @click="sortBy('title')">
               <v-icon left small>folder</v-icon>
-              <span class="caption text-lowercase">by project name</span>
+              <span class="caption yellow--text text-lowercase text--lighten-3">by project name</span>
             </v-btn>
           </template>
           <span>orders projects by project name</span>
@@ -16,9 +16,9 @@
 
         <v-tooltip top>
           <template v-slot:activator="{ on }">
-            <v-btn text small color="grey" v-on="on" @click="sortBy('status')">
+            <v-btn text small color="yellow" v-on="on" @click="sortBy('status')">
               <v-icon left small>offline_pin</v-icon>
-              <span class="caption text-lowercase">by status</span>
+              <span class="caption yellow--text text-lowercase text--lighten-3">by status</span>
             </v-btn>
           </template>
           <span>orders projects by project status</span>
@@ -74,7 +74,7 @@
 
 
       <v-snackbar v-model="snackbar" :timeout="4000" bottom>
-          <span>Succesfully deleted the project</span>
+          <span>Project deleted successfully.</span>
           <v-btn text color="white" @click="snackbar = false">Close</v-btn>
       </v-snackbar>
 

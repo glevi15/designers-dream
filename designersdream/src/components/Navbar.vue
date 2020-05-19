@@ -9,11 +9,11 @@
     <!--This is the bar on top of our screen -->
     <v-app-bar color="blue" flat app>
       <v-app-bar-nav-icon class="white --text" @click="drawer = !drawer"></v-app-bar-nav-icon>
-
+      
       <v-toolbar-title>
         <router-link class="font-weight-dark black--text" style="text-decoration:none;" :to="'/'">
-        <span class="font-weight-light">Designers</span>
-        <span >Dream</span>
+        <span class="font-weight-light display-1">Designer's</span>
+        <span class="display-1">Dream</span>
         </router-link>
         </v-toolbar-title>
     </v-app-bar>
@@ -22,10 +22,10 @@
     <v-navigation-drawer app v-model="drawer" class="blue lighten-2">
       <v-layout column align-center>
         <v-flex class="mt-5">
-          <v-avatar size="100">
-            <img src="/pngwave.png" alt />
+          <v-avatar size="120">
+            <img src="/ourlogo2.png"  alt />
           </v-avatar>
-          <p class="white--text subheading mt-4">Designers' Tools</p>
+          <p class="white--text subheading mt-4">Designer's Dream </p>
         </v-flex>
 
         <v-flex class="mt-4 mb-3">

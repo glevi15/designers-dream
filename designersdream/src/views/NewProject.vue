@@ -3,14 +3,14 @@
   <div class="projects">
     <h1>Projects</h1>
 
-    <v-container>
+    <v-container class="mx-12 pt-12 mt-12">
       <v-row no-gutters>
         <v-col class="px-12" cols="12" xs="12" sm="5">
-          <div class="custom-navigation">
+          <div class="custom-navigation" style="background: none;">
             <!-- Paintable canvas -->
-            <paintable
+            <paintable style="background: #fff;"
               :active="paintableActive"
-              :horizontalNavigation="false"
+              :horizontalNavigation="true"
               :navigation="navigation"
               :factor="x1"
               :lineWidth="3"
@@ -74,7 +74,7 @@
       </v-row>
 
       <v-snackbar v-model="saveSnackbar" :timeout="4000" bottom>
-        <span>Succesfully saved the project</span>
+        <span>Project saved successfully.</span>
         <v-btn text color="white" @click="saveSnackbar = false">Close</v-btn>
       </v-snackbar>
 
