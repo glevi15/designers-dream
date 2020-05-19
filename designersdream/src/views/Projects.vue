@@ -25,9 +25,9 @@
         </v-tooltip>
       </v-layout>
 
-      <v-expansion-panels outlined hover popout="true">
+      <v-expansion-panels outlined hover popout>
         <v-expansion-panel
-          v-for="project in projects"
+          v-for="project in displayedProjects"
           :key="project.title"
           @click="setSelected(project.id)"
         >
@@ -72,12 +72,18 @@
         <span class="caption">Open</span>
       </v-btn>
 
-      <v-btn color="primary" class="my-6 ml-10">
+
+      <v-snackbar v-model="snackbar" :timeout="4000" bottom>
+          <span>Succesfully deleted the project</span>
+          <v-btn text color="white" @click="snackbar = false">Close</v-btn>
+      </v-snackbar>
+
+      <v-btn color="primary" class="my-6 ml-10" @click="deleteProject()" :loading="loading">
         <v-icon left small>delete</v-icon>
         <span class="caption">Delete</span>
       </v-btn>
 
-      <v-btn color="primary" class="my-6 ml-10">
+      <v-btn color="primary" class="my-6 ml-10" @click="downloadProject()">
         <v-icon left small>cloud_download</v-icon>
         <span class="caption">Download</span>
       </v-btn>
@@ -87,6 +93,8 @@
 
 <script>
 import Vue from "vue";
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
 
 export default {
   mounted() {
@@ -96,8 +104,15 @@ export default {
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data);
         this.projects = data.projects;
+        return data;
+      })
+      .then(data => {
+        Object.keys(data.projects).map(id => {
+          if (data.projects[id]) {
+            this.displayedProjects.push(data.projects[id]);
+          }
+        });
       })
       .catch(error => {
         console.error("Error:", error);
@@ -107,57 +122,18 @@ export default {
   data() {
     return {
       currentSelectedId: -1,
-      projects: [
-        //   {
-        //     title: "My project #1",
-        //     status: "Done",
-        //     src: "/handbag.png",
-        //     src2: "/handbag.png",
-        //     content:
-        //       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sollicitudin mauris eu nulla accumsan, vitae luctus nisl egestas."
-        //   },
-        //   {
-        //     title: "My project #2",
-        //     status: "Ongoing",
-        //     src: "/handbag1.png",
-        //     content:
-        //       "Aliquam id est diam. Integer viverra placerat porta. Nam eget pellentesque libero. Morbi vestibulum sem iaculis sagittis pulvinar. Donec"
-        //   },
-        //   {
-        //     title: "My project #3",
-        //     status: "Done",
-        //     src: "/handbag2.png",
-        //     content:
-        //       "diam mauris, tempus vel finibus sed, consectetur et tellus. Vivamus laoreet justo vitae dui tincidunt, at placerat nibh bibendum. Vivamus"
-        //   },
-        //   {
-        //     title: "My project #4",
-        //     status: "Done",
-        //     src: "/handbag3.png",
-        //     content:
-        //       "fringilla diam sed mi semper bibendum. Nulla justo sapien, sollicitudin vitae hendrerit bibendum, tempus nec ex. Aliquam felis quam,"
-        //   },
-        //   {
-        //     title: "My project #5",
-        //     status: "Ongoing",
-        //     src: "/handbag1.png",
-        //     content:
-        //       "convallis sed leo sit amet, auctor pharetra ligula. Vestibulum in augue ac ex tristique blandit vitae nec enim. Ut aliquet risus vitae erat"
-        //   },
-        //   {
-        //     title: "My project #6",
-        //     status: "Done",
-        //     src: "/handbag2.png",
-        //     content:
-        //       "convallis ornare. Vestibulum eget orci sed quam laoreet fermentum vel sollicitudin arcu. Pellentesque sed metus sem. Vivamus libero nisl, scelerisque sed ultrices eu, posuere sit amet leo."
-        //   }
-      ]
+      projects: {},
+      displayedProjects: [],
+      loading : false,
+      snackbar: false
     };
   },
+
   methods: {
     sortBy(property) {
-      this.projects.sort((a, b) => (a[property] < b[property] ? -1 : 1));
+      this.displayedProjects.sort((a, b) => (a[property] < b[property] ? -1 : 1));
     },
+
     setSelected(id) {
       this.currentSelectedId = id;
     },
@@ -189,7 +165,60 @@ export default {
 
     openProject() {
       Vue.prototype.$currentProjectId = this.currentSelectedId;
+
+      this.$root.$data.sketchImage = this.projects[this.currentSelectedId].sketchImage;
+      
       this.$router.push("/newproject");
+    },
+
+    downloadProject() {
+      var zip = new JSZip();
+      var img = zip.folder("images");
+
+      let sketchImage = this.projects[this.currentSelectedId]["sketchImage"];
+      let sketch = sketchImage.replace("data:image/png;base64,", "");
+
+      let resultImage = this.projects[this.currentSelectedId]["resultImage"];
+      let design = resultImage.replace("data:image/png;base64,", "");
+
+      img.file("sketch.png", sketch, { base64: true });
+      img.file("design.png", design, { base64: true });
+
+      zip.generateAsync({ type: "blob" }).then(function(content) {
+        saveAs(content, "design.zip");
+      });
+    },
+
+    deleteProject() {
+      this.loading = true
+
+      fetch("http://localhost:5000/delete", {
+        method: "POST",
+        // mode: 'no-cors',
+        headers: {
+          "Content-Type": "text/plain"
+        },
+        body: JSON.stringify({
+          id: this.currentSelectedId,
+        })
+      })
+      .then(response => {
+        if (response.status == 200) {
+          for (let i=0; i<this.displayedProjects.length; i++) {
+            if (this.displayedProjects[i].id == this.currentSelectedId) {
+              this.displayedProjects.splice(i, 1);
+              this.loading = false;
+              this.snackbar = true;
+              break;
+            }
+          }
+        }
+      }).then(() => {
+        console.log(this.displayedProjects)
+      }) 
+      .catch(error => {
+        console.error("Error:", error);
+      });
     }
   }
 };

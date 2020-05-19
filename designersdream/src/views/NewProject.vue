@@ -9,12 +9,13 @@
           <div class="custom-navigation">
             <!-- Paintable canvas -->
             <paintable
-              :active="isActive"
-              :horizontalNavigation="true"
+              :active="paintableActive"
+              :horizontalNavigation="false"
               :navigation="navigation"
               :factor="x1"
               :lineWidth="3"
               :lineWidthEraser="25"
+              :useEraser="useEraser"
               :showLineWidth="false"
               :color="black"
               :colors="false"
@@ -22,7 +23,7 @@
               :height="500"
               class="paint"
               ref="paintable"
-              @toggle-paintable="toggledPaintable"
+              @toggle-paintable="true"
             >
               <div class="control">
                 <h3>Paint</h3>
@@ -45,7 +46,12 @@
 
           <v-row class="mt-12">
             <v-col class="ml-8" cols="12" sm="8">
-              <v-btn x-large color="primary" @click="loadImage();buttonEnabler=false">
+              <v-btn
+                x-large
+                color="primary"
+                @click="loadImage();buttonEnabler=false"
+                :loading="imageLoading"
+              >
                 <!-- Our loadImage function is assigned to the onclick of the Get Image Button -->
                 GET IMAGE
                 <v-icon>mdi-upload</v-icon>
@@ -67,16 +73,33 @@
         </v-col>
       </v-row>
 
+      <v-snackbar v-model="saveSnackbar" :timeout="4000" bottom>
+        <span>Succesfully saved the project</span>
+        <v-btn text color="white" @click="saveSnackbar = false">Close</v-btn>
+      </v-snackbar>
+
       <v-row class="pr-12 mr-12">
         <!-- SAVE IMAGE BUTTON / WORK-IN-PROGRESS / WILL BE USED TO UPLOAD THE PROJECTS TO DATABASE-->
         <v-spacer></v-spacer>
         <v-col sm="3" class="pr-12 mr-12">
           <v-btn x-large shaped text>
-            <v-icon x-large @click="saveImage()" color="primary">mdi-content-save</v-icon>
+            <v-icon
+              x-large
+              @click="saveImage()"
+              color="primary"
+              :loading="saveLoading"
+            >mdi-content-save</v-icon>
           </v-btn>
 
           <!-- DOWNLOAD BUTTON -->
-          <v-btn x-large text color="primary" @click="downloadImage()" id="downloadButton" :disabled="buttonEnabler">
+          <v-btn
+            x-large
+            text
+            color="primary"
+            @click="downloadImage()"
+            id="downloadButton"
+            :disabled="buttonEnabler"
+          >
             <v-icon x-large>cloud_download</v-icon>
           </v-btn>
 
@@ -114,7 +137,9 @@
 // import func from '../../vue-temp/vue-editor-bridge';
 export default {
   data: () => ({
-    
+    saveLoading: false,
+    saveSnackbar: false,
+    imageLoading: false,
     items: [
       { title: "Facebook", icon: "mdi-facebook", route: "/" },
       { title: "Twitter", icon: "mdi-twitter", route: "/" },
@@ -122,18 +147,31 @@ export default {
     ],
     sketchImageSrc: "",
     outImageSrc: "",
-    buttonEnabler : true
+    buttonEnabler: true,
+    paintableActive: false
     // smallImageSrc: "",
   }),
 
+  beforeRouteLeave(to, from, next) {
+    // called when the route that renders this component is about to
+    // be navigated away from.
+    // has access to `this` component instance.
+    console.log(to,from,next)
+    this.$refs.paintable.removeItem()
+    next()
+  },
+
   mounted() {
-    console.log("from NewProject.vue", this.$currentProjectId)
+    console.log("from NewProject.vue");
     //this.$currentProjectId
-    
+    this.paintableActive = false;
+    this.$refs.paintable.setItem(undefined, this.$root.$data.sketchImage);
+    this.$refs.paintable.undoDrawingStep();
+    this.paintableActive = true;
   },
 
   methods: {
-  convert(dataUrl) {
+    convert(dataUrl) {
       // send data to backend via js fetch API
       const myData = { imageData: dataUrl };
       const myDataJSON = JSON.stringify(myData);
@@ -156,6 +194,8 @@ export default {
           // DOM update. We could also receive the image element
           // and set the src ourselves
           this.outImageSrc = convertedImageData;
+
+          this.imageLoading = false;
         })
         .catch(error => {
           console.error("Error:", error);
@@ -163,17 +203,16 @@ export default {
     },
 
     downloadImage() {
-      
       var image = this.outImageSrc.replace("image/png", "image/octet-stream");
-      var link = document.createElement('a');
+      var link = document.createElement("a");
       link.download = "my-design.png";
       link.href = image;
       link.click();
     },
 
     saveImage() {
-      console.log("Save image to database")
-
+      console.log("Save image to database");
+      this.saveLoading = true;
       const saveMessage = {
         id: this.$currentProjectId,
         sketchImage: this.sketchImageSrc,
@@ -192,7 +231,9 @@ export default {
         .then(response => response.json())
         .then(convertedData => {
           // TODO receive id of project here!!
-          console.log(convertedData)
+          console.log(convertedData);
+          this.saveLoading = false;
+          this.saveSnackbar = true;
         })
         .catch(error => {
           console.error("Error:", error);
@@ -201,7 +242,7 @@ export default {
 
     loadImage() {
       this.$refs.paintable.saveCurrentCanvasToStorage();
-
+      this.imageLoading = true;
       // let myImg = document.getElementById("outImg");
 
       let dataUrl = this.$refs.paintable.getItem();

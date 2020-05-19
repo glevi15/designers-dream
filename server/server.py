@@ -2,6 +2,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import os
 import tensorflow as tf
 import numpy as np
 import json
@@ -17,6 +18,9 @@ from flask_cors import CORS
 PROJECT_ID_COUNTER = 0
 database = {}
 database["projects"] = {}
+# if os.path.exists('db.json'):
+#     with open('db.json') as json_file:
+#         database = json.load(json_file)
 
 app = Flask(__name__)
             # static_folder = "./dist/static",
@@ -67,7 +71,6 @@ def create_project() :
 def save_project() :
     text_data = request.get_data(as_text=True)
     json_data = json.loads(text_data)
-    print("text: %s" % text_data)
 
     id = json_data["id"]
     sketch_image = json_data["sketchImage"]
@@ -101,6 +104,22 @@ def change_status() :
 
     return jsonify({'id' : id})
 
+@app.route('/delete', methods=['POST'])
+def delete_project() :
+    text_data = request.get_data(as_text=True)
+    json_data = json.loads(text_data)
+
+    id = json_data["id"]
+
+    if id in database["projects"]:
+        del database["projects"][id]
+
+        with open('db.json', 'w') as outfile:
+            json.dump(database, outfile)
+
+        return jsonify({'id' : id})
+
+    return jsonify({id:-1})
 
 def run_model(imageData):
     model_dir = "model"
@@ -133,4 +152,4 @@ def run_model(imageData):
     return output_data
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=1)
