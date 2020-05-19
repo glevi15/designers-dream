@@ -1,0 +1,31 @@
+html, body {
+    background-color: #eee;
+}
+
+canvas {
+    display: block;
+    border: 1px solid #555;
+}
+
+#convertButton {
+    align-self: center;
+}
+
+#panel {
+    object-fit: scale-down;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+#resultContainer {
+    align-self: stretch;
+    background: #500;
+}
+
+#resultImg {
+    display: block;
+    border: 1px solid #555;
+    height: 100%;
+}

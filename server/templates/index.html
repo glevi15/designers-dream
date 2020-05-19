@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="../static/p5.min.js"></script>
+    <script src="../static/p5.dom.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/style.css">
+    <meta charset="utf-8" />
+</head>
+
+<body>
+    <script src="../static/sketch.js"></script>
+
+    <div id="panel">
+        <div id="drawer">
+            <div id="canvasContainer">
+                <!-- Canvas goes here -->
+            </div>
+        </div>
+        
+        <button id="convertButton">Convert!</button>
+        
+        <div id="resultContainer">
+            <img id="resultImg"></img>
+        </div>
+    </div>
+
+    Eraser: <input type="checkbox" id="eraserToggle">
+    Eraser size: <input type="range" id="eraserSizeSlider" min="0" max="1" value="0.1" step="0.01">
+    <button id="clear">Clear</button>
+
+    <div id="extraImages">
+	</div>
+</body>
+
+</html>
