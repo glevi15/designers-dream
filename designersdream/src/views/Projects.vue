@@ -16,7 +16,7 @@
 
         <v-tooltip top>
           <template v-slot:activator="{ on }">
-            <v-btn text small color="yellow" v-on="on" @click="sortBy('status')">
+            <v-btn text small color="yellow" v-on="on" @click="sortBy('status')" class="mr-4">
               <v-icon left small>offline_pin</v-icon>
               <span class="caption yellow--text text-lowercase text--lighten-3">by status</span>
             </v-btn>
@@ -25,8 +25,8 @@
         </v-tooltip>
       </v-layout>
 
-      <v-expansion-panels outlined hover popout>
-        <v-expansion-panel
+      <v-expansion-panels hover >
+        <v-expansion-panel 
           v-for="project in displayedProjects"
           :key="project.title"
           @click="setSelected(project.id)"
@@ -55,38 +55,53 @@
           </v-layout>
           <v-expansion-panel-content>
             <v-card>
+              <v-row>
+              <v-col>
               <v-card-text class="px-4 dark--text">
                 <div class="font-weight-bold">Information</div>
                 <div>{{project.description}}</div>
-                <div>
-                  <img height="128" width="128" v-bind:src="project.sketchImage" />
-                  <img height="128" width="128" v-bind:src="project.resultImage" />
-                </div>
+                
+                <v-row class="pt-2">
+                  <v-card outlined class="ml-6">
+                    <img height="256" width="256" v-bind:src="project.sketchImage"/> 
+                  </v-card>
+
+                  <v-card outlined class="ml-12">
+                    <img height="256" width="256"  v-bind:src="project.resultImage"/>
+                  </v-card>
+                </v-row>
               </v-card-text>
+              </v-col>
+              <v-col class="text-right" style="position: absolute; bottom: 1em;">
+                    <v-btn color="primary" class="ml-10" @click="openProject()">
+                    <span class="caption">Open</span>
+                  </v-btn>
+
+                  <v-snackbar v-model="snackbar" :timeout="4000" bottom>
+                    <span>Project deleted successfully.</span>
+                    <v-btn text color="white" @click="snackbar = false">Close</v-btn>
+                  </v-snackbar>
+
+                  <v-btn
+                    color="primary"
+                    class="ml-10"
+                    @click="deleteProject()"
+                    :loading="loading"
+                  >
+                    <v-icon left small>delete</v-icon>
+                    <span class="caption">Delete</span>
+                  </v-btn>
+
+                  <v-btn color="primary" class="ml-10 text-right" @click="downloadProject()">
+                    <v-icon left small>cloud_download</v-icon>
+                    <span class="caption">Download</span>
+                  </v-btn>
+                  </v-col>
+                  </v-row>
             </v-card>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
-
-      <v-btn color="primary" class="my-6 ml-10" @click="openProject()">
-        <span class="caption">Open</span>
-      </v-btn>
-
-
-      <v-snackbar v-model="snackbar" :timeout="4000" bottom>
-          <span>Project deleted successfully.</span>
-          <v-btn text color="white" @click="snackbar = false">Close</v-btn>
-      </v-snackbar>
-
-      <v-btn color="primary" class="my-6 ml-10" @click="deleteProject()" :loading="loading">
-        <v-icon left small>delete</v-icon>
-        <span class="caption">Delete</span>
-      </v-btn>
-
-      <v-btn color="primary" class="my-6 ml-10" @click="downloadProject()">
-        <v-icon left small>cloud_download</v-icon>
-        <span class="caption">Download</span>
-      </v-btn>
     </v-container>
   </div>
 </template>
@@ -124,14 +139,16 @@ export default {
       currentSelectedId: -1,
       projects: {},
       displayedProjects: [],
-      loading : false,
+      loading: false,
       snackbar: false
     };
   },
 
   methods: {
     sortBy(property) {
-      this.displayedProjects.sort((a, b) => (a[property] < b[property] ? -1 : 1));
+      this.displayedProjects.sort((a, b) =>
+        a[property] < b[property] ? -1 : 1
+      );
     },
 
     setSelected(id) {
@@ -166,8 +183,13 @@ export default {
     openProject() {
       Vue.prototype.$currentProjectId = this.currentSelectedId;
 
-      this.$root.$data.sketchImage = this.projects[this.currentSelectedId].sketchImage;
-      
+      this.$root.$data.sketchImage = this.projects[
+        this.currentSelectedId
+      ].sketchImage;
+      this.$root.$data.resultImage = this.projects[
+        this.currentSelectedId
+      ].resultImage;
+
       this.$router.push("/newproject");
     },
 
@@ -175,6 +197,7 @@ export default {
       var zip = new JSZip();
       var img = zip.folder("images");
 
+      let projectName = this.projects[this.currentSelectedId].title;
       let sketchImage = this.projects[this.currentSelectedId]["sketchImage"];
       let sketch = sketchImage.replace("data:image/png;base64,", "");
 
@@ -185,12 +208,12 @@ export default {
       img.file("design.png", design, { base64: true });
 
       zip.generateAsync({ type: "blob" }).then(function(content) {
-        saveAs(content, "design.zip");
+        saveAs(content, projectName + ".zip");
       });
     },
 
     deleteProject() {
-      this.loading = true
+      this.loading = true;
 
       fetch("http://localhost:5000/delete", {
         method: "POST",
@@ -199,26 +222,27 @@ export default {
           "Content-Type": "text/plain"
         },
         body: JSON.stringify({
-          id: this.currentSelectedId,
+          id: this.currentSelectedId
         })
       })
-      .then(response => {
-        if (response.status == 200) {
-          for (let i=0; i<this.displayedProjects.length; i++) {
-            if (this.displayedProjects[i].id == this.currentSelectedId) {
-              this.displayedProjects.splice(i, 1);
-              this.loading = false;
-              this.snackbar = true;
-              break;
+        .then(response => {
+          if (response.status == 200) {
+            for (let i = 0; i < this.displayedProjects.length; i++) {
+              if (this.displayedProjects[i].id == this.currentSelectedId) {
+                this.displayedProjects.splice(i, 1);
+                this.loading = false;
+                this.snackbar = true;
+                break;
+              }
             }
           }
-        }
-      }).then(() => {
-        console.log(this.displayedProjects)
-      }) 
-      .catch(error => {
-        console.error("Error:", error);
-      });
+        })
+        .then(() => {
+          console.log(this.displayedProjects);
+        })
+        .catch(error => {
+          console.error("Error:", error);
+        });
     }
   }
 };
@@ -226,18 +250,18 @@ export default {
 
 <style>
 .project.Done {
-  border-left: 12px solid #20dd0f;
+  border-left: 12px solid #8bc34a;
 }
 
 .project.Ongoing {
-  border-left: 12px solid #311b92;
+  border-left: 12px solid #039be5;
 }
 
 .v-chip.Done {
-  background: #20dd0f;
+  background: #8bc34a;
 }
 
 .v-chip.Ongoing {
-  background: #311b92;
+  background: #039be5;
 }
 </style>

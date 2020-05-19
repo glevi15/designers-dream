@@ -19,9 +19,8 @@
 
         <v-card-actions>
           <v-btn color="success" text @click="cancel()">Cancel</v-btn>
-                            <v-spacer></v-spacer>
+          <v-spacer></v-spacer>
           <v-btn color="primary" text :to="'/newproject'" @click="submit()">Create</v-btn>
-          
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -29,6 +28,8 @@
 </template>
 
 <script>
+import Vue from 'vue'
+
 export default {
   data() {
     return {
@@ -39,11 +40,42 @@ export default {
   },
   methods: {
     submit() {
-      (this.dialog = false), console.log(this.title, this.content);
-      this.$emit("projectAdded"); //will be used to close snackbar in navbar component.
+      this.dialog = false;
+      //console.log(this.title, this.content);
+      //this.$emit("projectAdded"); //will be used to close snackbar in navbar component.
+
+      const createMessage = {
+        title: this.title,
+        description: this.content,
+        status: "Ongoing"
+      };
+      const createMessageJSON = JSON.stringify(createMessage);
+
+      fetch("http://localhost:5000/create", {
+        method: "POST",
+        // mode: 'no-cors',
+        headers: {
+          "Content-Type": "text/plain"
+        },
+        body: createMessageJSON
+      })
+        .then(response => response.json())
+        .then(data => {
+          // TODO receive id of project here!!
+          console.log("from Dashboard - id = ", data.id);
+          Vue.prototype.$currentProjectId = data.id;
+
+
+          this.$emit("projectAdded")
+
+          this.$router.push("/newproject");
+        })
+        .catch(error => {
+          console.error("Error:", error);
+        });
     },
     cancel() {
-      (this.dialog = false);
+      this.dialog = false;
     }
   }
 };

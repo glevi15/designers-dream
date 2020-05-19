@@ -50,8 +50,11 @@
                   <v-row>
                     <v-col class="mx-6"><p class="white--text  title">Click and get started!</p></v-col>
                     
-                    <v-col class="text-right ">
-                      <v-btn x-large flat v-on="on" class="mr-6" >Get Started</v-btn>
+                    <v-col class="text-right">
+                      <v-btn x-large flat v-on="on" class="mr-6" >
+                        Get Started
+                      <v-icon>mdi-arrow-right</v-icon>
+                      </v-btn>
                     </v-col>
                   </v-row>
                 </template>
@@ -104,9 +107,9 @@
                 </v-container>
               </v-card>
 
-              <v-btn icon style="align-self: center;">
+              <!-- <v-btn icon disabled style="align-self: center;"> -->
                 <v-icon x-large color="primary">mdi-arrow-right-bold</v-icon>
-              </v-btn>
+              <!-- </v-btn> -->
 
               <v-card class="d-inline-block mx-auto">
                 <v-container>
@@ -141,9 +144,9 @@
                 </v-container>
               </v-card>
 
-              <v-btn icon style="align-self: center;">
+              <!-- <v-btn icon style="align-self: center;"> -->
                 <v-icon x-large color="primary">mdi-arrow-right-bold</v-icon>
-              </v-btn>
+              <!-- </v-btn> -->
 
               <v-card class="d-inline-block mx-auto mt-8">
                 <v-container>

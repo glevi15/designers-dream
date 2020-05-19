@@ -4,9 +4,9 @@ import router from './router'
 import vuetify from './plugins/vuetify'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
+import VueSocialSharing from 'vue-social-sharing'
 
 Vue.config.productionTip = false
-
 
 //FROM HERE ...
 import Paintable from 'vue-paintable';
@@ -32,3 +32,4 @@ new Vue({
   render: h => h(App)
 }).$mount('#app')
 
+Vue.use(VueSocialSharing);

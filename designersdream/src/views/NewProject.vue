@@ -1,7 +1,6 @@
 
 <template>
   <div class="projects">
-    <h1>Projects</h1>
 
     <v-container class="mx-12 pt-12 mt-12">
       <v-row no-gutters>
@@ -62,7 +61,7 @@
 
         <v-col class="px-12" cols="12" sm="5">
           <v-card class="d-inline-block mx-auto mt-4" width="500" height="500">
-            <v-container class="mt-6">
+            <v-container>
               <v-row justify="space-between">
                 <img id="outImg" :src="outImageSrc" width="500" height="500" />
 
@@ -107,7 +106,7 @@
             <!--SHARE BUTTON -->
             <template v-slot:activator="{ on }">
               <v-btn x-large text icon v-on="on">
-                <v-icon>mdi-share-variant</v-icon>
+                <v-icon color="primary">mdi-share-variant</v-icon>
               </v-btn>
             </template>
 
@@ -116,11 +115,22 @@
                 <v-list-item-group v-model="item" color="primary">
                   <v-list-item v-for="(item, i) in items" :key="i">
                     <v-list-item-icon>
-                      <v-icon v-text="item.icon"></v-icon>
+                      <v-icon color="primary" v-text="item.icon"></v-icon>
                     </v-list-item-icon>
 
                     <v-list-item-content>
-                      <v-list-item-title v-text="item.title"></v-list-item-title>
+                      <!-- düğme konucaksa on click, buna konacak -->
+<ShareNetwork 
+    :network="item.title"
+    url="https://aavci123.wixsite.com/designers-dream"
+    title="Check out Designer's Dream!"
+    description="Our capstone design project for COMP 491 turns your clothing designs into reality!"
+    quote=""
+    hashtags="designersdream"
+  > {{item.title}}
+</ShareNetwork>
+
+                      <!-- <v-list-item-title v-text="item.title"></v-list-item-title> -->
                     </v-list-item-content>
                   </v-list-item>
                 </v-list-item-group>
@@ -143,7 +153,8 @@ export default {
     items: [
       { title: "Facebook", icon: "mdi-facebook", route: "/" },
       { title: "Twitter", icon: "mdi-twitter", route: "/" },
-      { title: "Instagram", icon: "mdi-instagram", route: "/" }
+      { title: "Reddit", icon: "mdi-reddit", route: "/" },
+      // { title: "Instagram", icon: "mdi-instagram", route: "/" }
     ],
     sketchImageSrc: "",
     outImageSrc: "",
@@ -158,6 +169,10 @@ export default {
     // has access to `this` component instance.
     console.log(to,from,next)
     this.$refs.paintable.removeItem()
+
+    this.$root.$data.resultImage = "";
+    this.$root.$data.sketchImage = "";
+
     next()
   },
 
@@ -168,6 +183,8 @@ export default {
     this.$refs.paintable.setItem(undefined, this.$root.$data.sketchImage);
     this.$refs.paintable.undoDrawingStep();
     this.paintableActive = true;
+
+    this.outImageSrc = this.$root.$data.resultImage;
   },
 
   methods: {

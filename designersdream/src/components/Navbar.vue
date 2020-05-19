@@ -7,11 +7,11 @@
       </v-snackbar>
 
     <!--This is the bar on top of our screen -->
-    <v-app-bar color="blue" flat app>
+    <v-app-bar color="black" flat app>
       <v-app-bar-nav-icon class="white --text" @click="drawer = !drawer"></v-app-bar-nav-icon>
       
       <v-toolbar-title>
-        <router-link class="font-weight-dark black--text" style="text-decoration:none;" :to="'/'">
+        <router-link class="font-weight-dark white--text" style="text-decoration:none;" :to="'/'">
         <span class="font-weight-light display-1">Designer's</span>
         <span class="display-1">Dream</span>
         </router-link>
@@ -19,11 +19,11 @@
     </v-app-bar>
     
     <!-- Side Panel -->
-    <v-navigation-drawer app v-model="drawer" class="blue lighten-2">
+    <v-navigation-drawer app v-model="drawer" class="secondary">
       <v-layout column align-center>
         <v-flex class="mt-5">
           <v-avatar size="120">
-            <img src="/ourlogo2.png"  alt />
+            <img src="/ourlogo2.png" alt />
           </v-avatar>
           <p class="white--text subheading mt-4">Designer's Dream </p>
         </v-flex>
@@ -33,11 +33,11 @@
         </v-flex>
       </v-layout>
       <v-list-shaped>
-        <v-subheader>MENU</v-subheader>
+        <v-subheader class="white--text">MENU</v-subheader>
         <v-list-item-group v-model="item" color="primary">
           <v-list-item v-for="link in links" :key="link.text" router :to="link.route">
             <v-list-item-action>
-              <v-icon>{{link.icon}}</v-icon>
+              <v-icon color="white">{{link.icon}}</v-icon>
             </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title class="white--text">{{link.text}}</v-list-item-title>
